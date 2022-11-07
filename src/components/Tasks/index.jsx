@@ -1,40 +1,17 @@
-import { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import axios from "axios"
 
 import styles from "./Tasks.module.scss"
 
 import { MdDeleteOutline, MdOutlineEdit, MdOutlineSave } from "react-icons/md"
 
-function Tasks() {
-  const [tasks, setTasks] = useState([])
+function Tasks({ tasks, setTasks }) {
   const token = localStorage.getItem("token")
-
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          "https://first-node-js-app-r.herokuapp.com/api/todos",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        setTasks(res.data)
-      } catch (error) {
-        console.error(error)
-        alert("Не получается загрузить все задачки :(")
-      }
-    }
-    fetchData()
-  }, [])
 
   //functions
   const deleteHandler = async (item) => {
     try {
-      console.log(item)
-      setTasks((item) => item.filter((prev) => prev.ID !== item.ID))
+      setTasks((tasks) => tasks.filter((prev) => prev.ID !== item.ID))
       await axios.delete(
         `https://first-node-js-app-r.herokuapp.com/api/todos/${item.ID}`,
         {
@@ -71,8 +48,8 @@ function Tasks() {
         tasks.map((item) => {
           return (
             <div
-              key={item.ID}
               className={`${styles.task} d-flex justify-between align-center`}
+              key={item.ID}
             >
               <div>{item.title}</div>
               <div className="d-flex justify-between align-center">

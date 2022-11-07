@@ -1,32 +1,28 @@
 import { useState } from "react"
 import axios from "axios"
 
-function Input() {
+function Input({ tasks, setTasks }) {
   const [title, setTitle] = useState("")
 
   const addTodo = async () => {
     try {
       const token = localStorage.getItem("token")
-      await axios.post(
-        "https://first-node-js-app-r.herokuapp.com/api/todos",
-        {
-          title: title,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      await axios
+        .post(
+          "https://first-node-js-app-r.herokuapp.com/api/todos",
+          {
+            title: title,
           },
-        }
-      )
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => setTasks([...tasks], res.data))
     } catch (error) {
       console.error(error)
       alert("Не добавляется задачка чёт :(")
-    }
-  }
-
-  const clickHandler = () => {
-    if (title) {
-      addTodo(title)
     }
     setTitle("")
   }
@@ -34,7 +30,7 @@ function Input() {
   const enterHandler = (e) => {
     if (e.key === "Enter") {
       e.preventDefault()
-      clickHandler()
+      addTodo()
     }
   }
 
@@ -55,9 +51,11 @@ function Input() {
         type="submit"
         onClick={(e) => {
           e.preventDefault()
-          clickHandler()
+          addTodo()
         }}
         style={{ width: "30%" }}
+        onChange={(e) => setTitle(e.target.value)}
+        disabled={!title.length}
       >
         Добавить задачу
       </button>
