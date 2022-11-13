@@ -19,7 +19,7 @@ function Input({ tasks, setTasks }) {
             },
           }
         )
-        .then((res) => setTasks([...tasks], res.data))
+        .then((res) => setTasks([...tasks, res.data]))
     } catch (error) {
       console.error(error)
       alert("Не добавляется задачка чёт :(")
