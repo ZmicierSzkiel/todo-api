@@ -9,8 +9,11 @@ import styles from "./Todo.module.scss"
 function Todo() {
   const [tasks, setTasks] = useState([])
 
+  const token = localStorage.getItem("token")
+
+  //effects
+
   useEffect(() => {
-    const token = localStorage.getItem("token")
     const fetchData = async () => {
       try {
         await axios
@@ -26,7 +29,9 @@ function Todo() {
       }
     }
     fetchData()
-  }, [])
+  })
+
+  //functions
 
   return (
     <div className={`${styles.innerContainer} d-flex flex-column align-center`}>
